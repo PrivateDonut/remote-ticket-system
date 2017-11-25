@@ -1,5 +1,6 @@
 <?php
 include "config.php";
+include "include/head.php";
 if(isset($_GET['p'])) {
     $page = $_GET['p'];
     if(file_exists("pages/$page.php")) {
@@ -13,4 +14,5 @@ elseif(isset($_GET['ticket'])) {
     }else{
     include("pages/login.php");
 }
+include "include/foot.php";
 ?>

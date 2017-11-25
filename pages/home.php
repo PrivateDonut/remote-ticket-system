@@ -7,14 +7,6 @@ if(isset($_SESSION['staff']) == 1) {
  ?>
 <!DOCTYPE html>
 <html>
-<head>
-  <title><?php echo $title ?></title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-</head>
 <body>
 <a href="/?p=logout" class="btn btn-info pull-right" role="button">Logout</a>
 <!-- Table Rows Start -->
@@ -60,12 +52,6 @@ if(isset($_SESSION['staff']) == 1) {
 	?>
 	</tbody>
   </table>
-</div>
-<!-- Developer Credits -->
-<div class="footer-copyright">
-    <div align="center" class="container-fluid">
-        Made By - <a href="http://www.ac-web.org/forums/member.php?212435-PrivateDonut">PrivateDonut</a>
-    </div>
 </div>
 </body>
 </html>
