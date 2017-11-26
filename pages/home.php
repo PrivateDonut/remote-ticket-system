@@ -1,8 +1,7 @@
 <?php 
 session_start();
+getAccess();
 mysqli_select_db($conn, $c_dbname);
-
-if(isset($_SESSION['staff']) == 1) {
  ?>
 <!DOCTYPE html>
 <html>
@@ -54,10 +53,3 @@ if(isset($_SESSION['staff']) == 1) {
 </div>
 </body>
 </html>
-
-<?php
-} else {
-  // Show nothing yet... 
-  echo "5";
-}
-?>
