@@ -24,6 +24,7 @@ mysqli_select_db($conn, $a_dbname);
       $stmt->bind_param("ss", $currentip, $user);
       if ($stmt->execute()) {
         $_SESSION['username'] = $user;
+        $_SESSION['password'] = $password;
         $_SESSION['staff'] = $staff;
         header('location: ../?p=home');
       }

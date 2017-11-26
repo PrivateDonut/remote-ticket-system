@@ -1,6 +1,5 @@
 <?php 
 session_start();
-include 'config.php';
 mysqli_select_db($conn, $c_dbname);
 
 if(isset($_SESSION['staff']) == 1) {
@@ -8,7 +7,7 @@ if(isset($_SESSION['staff']) == 1) {
 <!DOCTYPE html>
 <html>
 <body>
-<a href="/?p=logout" class="btn btn-info pull-right" role="button">Logout</a>
+<a href="/pages/logout.php" class="btn btn-info pull-right" role="button">Logout</a>
 <!-- Table Rows Start -->
 <div class="container">     
   <table class="table">

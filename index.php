@@ -1,5 +1,4 @@
 <?php
-include "config.php";
 include "include/head.php";
 if(isset($_GET['p'])) {
     $page = $_GET['p'];
