@@ -3,10 +3,7 @@ session_start();
 getAccess();
 mysqli_select_db($conn, $c_dbname);
  ?>
-<!DOCTYPE html>
-<html>
-<body>
-<a href="/pages/logout.php" class="btn btn-info pull-right" role="button">Logout</a>
+<a href="?p=logout" class="btn btn-info pull-right" role="button">Logout</a>
 <!-- Table Rows Start -->
 <div class="container">     
   <table class="table">
@@ -28,5 +25,3 @@ mysqli_select_db($conn, $c_dbname);
 	</tbody>
   </table>
 </div>
-</body>
-</html>

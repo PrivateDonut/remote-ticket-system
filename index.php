@@ -11,7 +11,7 @@ if(isset($_GET['p'])) {
 elseif(isset($_GET['ticket'])) {
         include("pages/ticket.php");
     }else{
-    include("pages/login.php");
+    include('pages/login.php');
 }
 include "include/foot.php";
 ?>

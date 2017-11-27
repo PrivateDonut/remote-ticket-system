@@ -28,7 +28,7 @@ mysqli_select_db($conn, $a_dbname);
       if ($stmt->execute()) {
         $_SESSION['username'] = $user;
         $_SESSION['staff'] = $staff;
-        header('location: ../?p=home');
+        header('location: ?p=home');
       }
 	}
   }else {
@@ -169,7 +169,7 @@ $command2 = "ticket complete $ticketID";
 
 $result = $client->executeCommand(new SoapParam($command1, 'command'));
 $result2 = $client->executeCommand(new SoapParam($command2, 'command'));
-header('location: /index.php?success');
+header('location: index.php?success');
 	}
 }
 
@@ -204,7 +204,7 @@ function getUsername(){
 
 function getAccess(){
 	if($_SESSION['staff'] == 0){
-	header('location: ../pages/logout.php');
+	header('location: pages/logout.php');
 	}else{
 		// Redirect to home page.
 	}

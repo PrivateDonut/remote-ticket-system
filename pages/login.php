@@ -3,9 +3,6 @@ session_start();
 
 if(isset($_SESSION['staff']) == false) {
 ?>
-<!DOCTYPE html>
-<html>
-<body>
  <div class="container">
       <form class="form-signin" method="post">
         <h3 class="form-signin-heading">Log Into <?php echo $server ?></h3>
@@ -21,6 +18,6 @@ if(isset($_SESSION['staff']) == false) {
 </html>
 <?php
 }else {
-  header('location: ../?p=home');
+  header('location: ?p=home');
 }
 ?>
