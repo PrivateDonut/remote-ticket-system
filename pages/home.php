@@ -23,30 +23,7 @@ mysqli_select_db($conn, $c_dbname);
 <!-- Table Data Starts -->
     <tbody>
     <?php
-	$stmt = $conn->prepare("SELECT id, playerguid, name, type, completed, closedBy FROM gm_ticket");
-	$stmt->execute();
-	$stmt->bind_result($id, $guid, $name, $type, $completed, $closedBy);
-	$stmt->store_result();
-	if($stmt->num_rows > 0) {
-		while($stmt->fetch()) {
-      if ($closedBy == 0 ){
-      if ($completed == 0) {
-      	echo "<tr>";
-        echo "<td>$id</td>";
-     	  echo "<td>$guid</td>";
-        echo "<td>$name</td>";
-        echo "<td>$type</td>";
-        echo "<td>$completed</td>";
-        echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
-        echo "</tr>";
-    		} else {
-          // Show no tickets if completed == 1 or higher. 
-        } 
-      }else {
-        // Show no tickets if closedBy == 1 or higher.
-      }
-	}
-}
+    echo getTickets();
 	?>
 	</tbody>
   </table>

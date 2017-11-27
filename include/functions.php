@@ -15,6 +15,7 @@ function logIn(){
 }
 include 'config.php';
 mysqli_select_db($conn, $a_dbname);
+
   $stmt = $conn->prepare("SELECT username, sha_pass_hash, staff FROM account WHERE username = ? AND sha_pass_hash = ?");
   $stmt->bind_param("ss", $username, $password);
   $stmt->execute();
@@ -35,10 +36,73 @@ mysqli_select_db($conn, $a_dbname);
   	}
  }
 
+
+// Display tickets on home page
+ function getTickets(){
+ 	include 'config.php';
+ 	mysqli_select_db($conn, $c_dbname);
+
+ 	// Trinity Core Support
+ 	if($core == 1){
+ 	$stmt = $conn->prepare("SELECT id, playerguid, name, type, completed, closedBy FROM gm_ticket");
+	$stmt->execute();
+	$stmt->bind_result($id, $guid, $name, $type, $completed, $closedBy);
+	$stmt->store_result();
+	if($stmt->num_rows > 0) {
+		while($stmt->fetch()) {
+      if ($closedBy == 0 ){
+      if ($completed == 0) {
+      	echo "<tr>";
+        echo "<td>$id</td>";
+     	  echo "<td>$guid</td>";
+        echo "<td>$name</td>";
+        echo "<td>$type</td>";
+        echo "<td>$completed</td>";
+        echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
+        echo "</tr>";
+    		} else {
+          // Show no tickets if completed == 1 or higher. 
+        } 
+      }else {
+        // Show no tickets if closedBy == 1 or higher.
+      }
+	}
+ }
+}
+// Elysium Core Support
+if($core == 2){
+ 	$stmt = $conn->prepare("SELECT ticketId, guid, name, closedBy, completed, ticketType FROM gm_tickets");
+	$stmt->execute();
+	$stmt->bind_result($id, $guid, $name, $closedBy, $completed, $type);
+	$stmt->store_result();
+	if($stmt->num_rows > 0) {
+		while($stmt->fetch()) {
+      if ($closedBy == 0 ){
+      if ($completed == 0) {
+      	echo "<tr>";
+        echo "<td>$id</td>";
+     	  echo "<td>$guid</td>";
+        echo "<td>$name</td>";
+        echo "<td>$type</td>";
+        echo "<td>$completed</td>";
+        echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
+        echo "</tr>";
+    		} else {
+          // Show no tickets if completed == 1 or higher. 
+        } 
+      }else {
+        // Show no tickets if closedBy == 1 or higher.
+      }
+	}
+  }
+}
+}
+
 // Get ticket information in order to display it on /pages/ticket.php.
 function getTikcetInfo(){
 	include 'config.php';
 	mysqli_select_db($conn, $c_dbname);
+	if($core == 1){
 		$stmt = $conn->prepare("SELECT id, playerGuid, description, name FROM gm_ticket WHERE id = ?");
 		$stmt->bind_param("i", $_GET['ticket']);
 		$stmt->execute();
@@ -52,6 +116,22 @@ function getTikcetInfo(){
 				$_SESSION['pGuid'] = $playerGuid;
 		}
 	}
+  }
+  if($core == 2){
+  	$stmt = $conn->prepare("SELECT ticketId, guid, name, message FROM gm_tickets WHERE ticketId = ?");
+		$stmt->bind_param("i", $_GET['ticket']);
+		$stmt->execute();
+		$stmt->bind_result($id, $c_playerGuid,  $name, $description);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['ticketId'] = $id;
+				$_SESSION['description'] = $description;
+				$_SESSION['name'] = $name;
+				$_SESSION['c_pGuid'] = $c_playerGuid;
+  	}
+  }
+}
 }
 
 // Handles the ticket reply by using soap to send in-game commands.
@@ -59,6 +139,8 @@ function ticketReply(){
 
 include 'config.php';
 $ticketiD = $_SESSION['ticketId'];
+
+if($core == 1){
 $client = new SoapClient(NULL, array(
 	'location' => "http://$host:$soapPort/",
 	'uri' => 'urn:TC',
@@ -66,6 +148,15 @@ $client = new SoapClient(NULL, array(
 	'login' => $soapAccount,
 	'password' => $soapPassword,
 ));
+}else if ($core == 2){
+	$client = new SoapClient(NULL, array(
+	'location' => "http://$host:$soapPort/",
+	'uri' => 'urn:MaNGOS',
+	'style' => SOAP_RPC,
+	'login' => $soapAccount,
+	'password' => $soapPassword,
+));
+}
 
 $ticketID=$ticketiD;
 // Obtains ticket reply from /pages/ticket.php
@@ -86,6 +177,7 @@ header('location: /index.php?success');
 function getUsername(){
 	include 'config.php';
 	mysqli_select_db($conn, $a_dbname);
+	if($core == 1){
 		$stmt = $conn->prepare("SELECT username FROM account WHERE id = ?");
 		$stmt->bind_param("i", $_SESSION['pGuid']);
 		$stmt->execute();
@@ -96,6 +188,18 @@ function getUsername(){
 				$_SESSION['userAccount'] = $userAccount;
 		}
 	}
+}else if($core == 2){
+		$stmt = $conn->prepare("SELECT username FROM account WHERE id = ?");
+		$stmt->bind_param("i", $_SESSION['c_pGuid']);
+		$stmt->execute();
+		$stmt->bind_result($userAccount);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['userAccount'] = $userAccount;
+		}
+	}
+}
 }
 
 function getAccess(){

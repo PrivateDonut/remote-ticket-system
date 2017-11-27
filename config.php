@@ -3,6 +3,12 @@
 $title = "Remote Ticket Management"; // Title you'll see on every page.
 $server = "Example-WoW"; // Server name.
 
+
+// Multi-Core Support
+//Trinity Core = 1
+//Elysium = 2
+$core = "1";
+
 // In-Game Account Information Used To Send Ticket Replies.
 $soapAccount = "admins"; // In-game Account - Requires game master permissions. 
 $soapPassword = "admins"; // In-game Account Password
