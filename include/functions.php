@@ -121,14 +121,14 @@ function getTikcetInfo(){
   	$stmt = $conn->prepare("SELECT ticketId, guid, name, message FROM gm_tickets WHERE ticketId = ?");
 		$stmt->bind_param("i", $_GET['ticket']);
 		$stmt->execute();
-		$stmt->bind_result($id, $c_playerGuid,  $name, $description);
+		$stmt->bind_result($id, $playerGuid,  $name, $description);
 		$stmt->store_result();
 		if($stmt->num_rows > 0) {
 			while($stmt->fetch()) {
 				$_SESSION['ticketId'] = $id;
 				$_SESSION['description'] = $description;
 				$_SESSION['name'] = $name;
-				$_SESSION['c_pGuid'] = $c_playerGuid;
+				$_SESSION['c_pGuid'] = $playerGuid;
   	}
   }
 }
@@ -189,8 +189,21 @@ function getUsername(){
 		}
 	}
 }else if($core == 2){
+		// Grab Character Account ID
+		mysqli_select_db($conn, $c_dbname);
+		$stmt = $conn->prepare("SELECT account FROM characters WHERE guid = ?");
+		$stmt->bind_param("s", $_SESSION['c_pGuid']);
+		$stmt->execute();
+		$stmt->bind_result($cGuid);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['getUseraccount'] = $cGuid;
+		}
+	}	// Grab Character Account Username
+		mysqli_select_db($conn, $a_dbname);
 		$stmt = $conn->prepare("SELECT username FROM account WHERE id = ?");
-		$stmt->bind_param("i", $_SESSION['c_pGuid']);
+		$stmt->bind_param("s", $_SESSION['getUseraccount']);
 		$stmt->execute();
 		$stmt->bind_result($userAccount);
 		$stmt->store_result();
