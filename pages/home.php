@@ -12,7 +12,6 @@ mysqli_select_db($conn, $c_dbname);
         <th>ID</th>
         <th>Guid</th>
         <th>Name</th>
-        <th>Ticket Type</th>
         <th>Completed</th>
         <th>View</th>
       </tr>

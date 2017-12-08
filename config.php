@@ -7,11 +7,12 @@ $server = "Example-WoW"; // Server name.
 // Multi-Core Support
 //Trinity Core = 1
 //Elysium = 2
+//Sunwell Core = 3
 $core = "1";
 
 // In-Game Account Information Used To Send Ticket Replies.
-$soapAccount = "admins"; // In-game Account - Requires game master permissions. 
-$soapPassword = "admins"; // In-game Account Password
+$soapAccount = "Account Name Here"; // In-game Account - Requires game master permissions. 
+$soapPassword = "Account Password Here"; // In-game Account Password
 $soapPort = "7878"; // Soap Port - Default port is usally 7878 for trinity core.
 
 // Database information

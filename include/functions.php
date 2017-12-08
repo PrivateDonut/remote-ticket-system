@@ -54,9 +54,8 @@ mysqli_select_db($conn, $a_dbname);
       if ($completed == 0) {
       	echo "<tr>";
         echo "<td>$id</td>";
-     	  echo "<td>$guid</td>";
+     	echo "<td>$guid</td>";
         echo "<td>$name</td>";
-        echo "<td>$type</td>";
         echo "<td>$completed</td>";
         echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
         echo "</tr>";
@@ -83,7 +82,6 @@ if($core == 2){
         echo "<td>$id</td>";
      	  echo "<td>$guid</td>";
         echo "<td>$name</td>";
-        echo "<td>$type</td>";
         echo "<td>$completed</td>";
         echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
         echo "</tr>";
@@ -95,6 +93,32 @@ if($core == 2){
       }
 	}
   }
+}
+// Sunwell Core Support
+if($core == 3){
+ 	$stmt = $conn->prepare("SELECT ticketID, guid, name, completed, closedBy FROM gm_tickets");
+	$stmt->execute();
+	$stmt->bind_result($id, $guid, $name, $completed, $closedBy);
+	$stmt->store_result();
+	if($stmt->num_rows > 0) {
+		while($stmt->fetch()) {
+      if ($closedBy == 0 ){
+      if ($completed == 0) {
+      	echo "<tr>";
+        echo "<td>$id</td>";
+     	echo "<td>$guid</td>";
+        echo "<td>$name</td>";
+        echo "<td>$completed</td>";
+        echo "<td><a href=\"?ticket=$id\" class=\"btn btn-info\" role=\"button\">View</a></td>";
+        echo "</tr>";
+    		} else {
+          // Show no tickets if completed == 1 or higher. 
+        } 
+      }else {
+        // Show no tickets if closedBy == 1 or higher.
+      }
+	}
+ }
 }
 }
 
@@ -132,6 +156,22 @@ function getTikcetInfo(){
   	}
   }
 }
+
+  if($core == 3){
+  	$stmt = $conn->prepare("SELECT ticketId, guid, name, message FROM gm_tickets WHERE ticketId = ?");
+		$stmt->bind_param("i", $_GET['ticket']);
+		$stmt->execute();
+		$stmt->bind_result($id, $playerGuid,  $name, $description);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['ticketId'] = $id;
+				$_SESSION['description'] = $description;
+				$_SESSION['name'] = $name;
+				$_SESSION['c_pGuid'] = $playerGuid;
+  	}
+  }
+}
 }
 
 // Handles the ticket reply by using soap to send in-game commands.
@@ -152,6 +192,14 @@ $client = new SoapClient(NULL, array(
 	$client = new SoapClient(NULL, array(
 	'location' => "http://$host:$soapPort/",
 	'uri' => 'urn:MaNGOS',
+	'style' => SOAP_RPC,
+	'login' => $soapAccount,
+	'password' => $soapPassword,
+));
+}else if ($core == 3){
+	$client = new SoapClient(NULL, array(
+	'location' => "http://$host:$soapPort/",
+	'uri' => 'urn:TC',
 	'style' => SOAP_RPC,
 	'login' => $soapAccount,
 	'password' => $soapPassword,
@@ -212,7 +260,32 @@ function getUsername(){
 				$_SESSION['userAccount'] = $userAccount;
 		}
 	}
+}else if($core == 3){
+		// Grab Character Account ID
+		mysqli_select_db($conn, $c_dbname);
+		$stmt = $conn->prepare("SELECT account FROM characters WHERE guid = ?");
+		$stmt->bind_param("s", $_SESSION['c_pGuid']);
+		$stmt->execute();
+		$stmt->bind_result($cGuid);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['getUseraccount'] = $cGuid;
+		}
+	}	// Grab Character Account Username
+		mysqli_select_db($conn, $a_dbname);
+		$stmt = $conn->prepare("SELECT username FROM account WHERE id = ?");
+		$stmt->bind_param("s", $_SESSION['getUseraccount']);
+		$stmt->execute();
+		$stmt->bind_result($userAccount);
+		$stmt->store_result();
+		if($stmt->num_rows > 0) {
+			while($stmt->fetch()) {
+				$_SESSION['userAccount'] = $userAccount;
+		}
+	}
 }
+
 }
 
 function getAccess(){
@@ -223,3 +296,4 @@ function getAccess(){
 	}
 }
 ?>
+
