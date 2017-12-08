@@ -1,5 +1,4 @@
 <?php 
-session_start();
 getAccess();
 mysqli_select_db($conn, $c_dbname);
  ?>

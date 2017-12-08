@@ -11,8 +11,8 @@ $server = "Example-WoW"; // Server name.
 $core = "1";
 
 // In-Game Account Information Used To Send Ticket Replies.
-$soapAccount = "Account Name Here"; // In-game Account - Requires game master permissions. 
-$soapPassword = "Account Password Here"; // In-game Account Password
+$soapAccount = "Username"; // In-game Account - Requires game master permissions. 
+$soapPassword = "Password"; // In-game Account Password
 $soapPort = "7878"; // Soap Port - Default port is usally 7878 for trinity core.
 
 // Database information
